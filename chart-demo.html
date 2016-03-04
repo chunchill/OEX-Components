@@ -1,100 +1,245 @@
-<html>
-	<head>
-		<title>Some Super Ace Knockout Driven Charts</title>
-		<style type="text/css">
-			div
-			{
-				border: 2px solid #555;
-				border-radius: 10px;
-				padding: 10px;
-				margin: 20px;
-			}
-		</style>
-	</head>
-	<body>
-		<div id="line-example">
-			<h2>Simple Line Chart Example</h2>
-			<canvas id="some-simple-line-chart"
-					width="400" height="150"
-					data-bind="chart: { type: 'Line', data: SimpleLineData }"></canvas>
-			<p>The above chart is generated using the data in the view model and rendered into the canvas</p>
-		</div>
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, target-densitydpi=device-dpi">
+    <title>orionEX</title>
+    <link href="themes/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="themes/bladecolor.min.css"/>
+    <link rel="stylesheet" href="themes/bootstrap.min.css">
+    <script src="lib/jquery-1.10.2.min.js"></script>
+    <script src="lib/jquery.mobile-1.4.5.js"></script>
+    <script src="lib/chart.js"></script>
+</head>
 
-		<div id="dynamic-doughnut-example">
-			<h2>TRIPLE D - WUT WUT - Dynamic Doughnut Data!</h2>
-			<canvas id="some-dynamic-doughnut-chart"
-					width="300" height="300"
-					data-bind="chart: { type: 'Doughnut', data: DynamicDoughnutData, options: { observeChanges: true, throttle: 1000 } }"></canvas>
-			<p>The above chart is generated dynamically using the data in the view model and rendered into the canvas</p>
-			<p>If you change any of the values beneath the chart will update to reflect them every second</p>
-			<label>Red</label><input type="number" data-bind="value: RedValue" />
-			<label>Green</label><input type="number" data-bind="value: GreenValue" />
-			<label>Yellow</label><input type="number" data-bind="value: YellowValue" />
-		</div>
+<link rel="shortcut icon" href="favicon.ico">
+</head>
 
-		<script src="lib/chart.js" type="text/javascript"></script>
-		<script src="lib/knockout-3.2.0.min.js" type="text/javascript"></script>
-		<script src="lib/knockout.chart.js" type="text/javascript"></script>
+<body>
+<div data-role="page" id="logonView" data-theme="a" style="background-image:url(images/bg/graphy-xs.png)">
+    <div data-role="content" style="padding: 3px 3px;">
+        <div class="jqm-block-content"
+             style="margin: 2px 2px; padding: 8px 8px; background-image: url(images/bg/banner15.jpg); background-size:cover; border-color:#E4E4E4;">
+            <p align="center"><img class="popphoto" src="images/exblack.png" height="24px"></p>
 
-		<script>
+            <div class="ui-nodisc-icon ui-alt-icon">
+                <!-- Classes added to the wrapper -->
+                <p align="center"><a href="#panelgrid"
+                                     class="ui-btn ui-shadow ui-corner-all ui-icon-grid ui-btn-icon-notext ui-btn-inline"
+                                     style="margin-right: 0px;">grid</a></p>
+            </div>
+        </div>
+        <div class="jqm-block-content"
+             style="margin: 2px 2px; margin-top:4px; padding: 6px 4px; background-image:url(images/tweets-bg.jpg); border-color:#E4E4E4;">
+            <div id="line-example">
+                <h2>Simple Line Chart Example</h2>
+                <canvas id="some-simple-line-chart"
+                        width="400" height="150"
+                        data-bind="chart: { type: 'Line', data: SimpleLineData }"></canvas>
+                <p>The above chart is generated using the data in the view model and rendered into the canvas</p>
+            </div>
 
-			function DummyViewModel()
-			{
-				this.SimpleLineData = {
-					labels: ["January", "February", "March", "April", "May", "June", "July"],
-					datasets: [
-						{
-							label: "My First dataset",
-							fillColor: "rgba(220,220,220,0.2)",
-							strokeColor: "rgba(220,220,220,1)",
-							pointColor: "rgba(220,220,220,1)",
-							pointStrokeColor: "#fff",
-							pointHighlightFill: "#fff",
-							pointHighlightStroke: "rgba(220,220,220,1)",
-							data: [65, 59, 80, 81, 56, 55, 40]
-						},
-						{
-							label: "My Second dataset",
-							fillColor: "rgba(151,187,205,0.2)",
-							strokeColor: "rgba(151,187,205,1)",
-							pointColor: "rgba(151,187,205,1)",
-							pointStrokeColor: "#fff",
-							pointHighlightFill: "#fff",
-							pointHighlightStroke: "rgba(151,187,205,1)",
-							data: [28, 48, 40, 19, 86, 27, 90]
-						}
-					]
-				};
+            <div id="dynamic-doughnut-example">
+                <h2>Dynamic Doughnut Data!</h2>
+                <canvas id="some-dynamic-doughnut-chart"
+                        width="300" height="300"
+                        data-bind="chart: { type: 'Doughnut', data: DynamicDoughnutData, options: { observeChanges: true, throttle: 1000 } }"></canvas>
+                <p>The above chart is generated dynamically using the data in the view model and rendered into the
+                    canvas</p>
 
-				this.RedValue = ko.observable(300);
-				this.GreenValue = ko.observable(50);
-				this.YellowValue = ko.observable(100);
+                <p>If you change any of the values beneath the chart will update to reflect them every second</p>
+                <label>Red</label><input type="number" data-bind="value: RedValue"/>
+                <label>Green</label><input type="number" data-bind="value: GreenValue"/>
+                <label>Yellow</label><input type="number" data-bind="value: YellowValue"/>
+            </div>
 
-				this.DynamicDoughnutData = [
-					{
-						value: this.RedValue,
-						color:"#F7464A",
-						highlight: "#FF5A5E",
-						label: "Red"
-					},
-					{
-						value: this.GreenValue,
-						color: "#46BFBD",
-						highlight: "#5AD3D1",
-						label: "Green"
-					},
-					{
-						value: this.YellowValue,
-						color: "#FDB45C",
-						highlight: "#FFC870",
-						label: "Yellow"
-					}
-				];
+            <div id="dynamic-pie-example">
+                <h2>Pie Chart Data!</h2>
+                <canvas id="some-dynamic-pie-chart"
+                        width="300" height="300"
+                        data-bind="chart: { type: 'Pie', data: DynamicPieData, options: { observeChanges: true, throttle: 1000 } }"></canvas>
+                <p>The above chart is generated dynamically using the data in the view model and rendered into the
+                    canvas</p>
+
+                <p>If you change any of the values beneath the chart will update to reflect them every second</p>
+                <label>Red</label><input type="number" data-bind="value: RedValue"/>
+                <label>Green</label><input type="number" data-bind="value: GreenValue"/>
+                <label>Yellow</label><input type="number" data-bind="value: YellowValue"/>
+            </div>
+
+            <div id="barchart-example">
+                <h2>Bar Chart</h2>
+
+                <p>A bar chart is a way of showing data as bars.</p>
+
+                <p>It is sometimes used to show trend data, and the comparison of multiple data sets side by side.</p>
+                <canvas id="some-simple-bar-chart"
+                        width="400" height="150"
+                        data-bind="chart: { type: 'Bar', data: SimpleBarData }"></canvas>
+            </div>
 
 
-			}
+            <div id="rada-example">
+                <h2>Radar Chart</h2>
 
-            ko.applyBindings(new DummyViewModel());
-        </script>
-	</body>
+                <p>A radar chart is a way of showing multiple data points and the variation between them..</p>
+
+                <p>They are often useful for comparing the points of two or more different data sets.</p>
+                <canvas id="rada-chart-sample"
+                        width="400" height="150"
+                        data-bind="chart: { type: 'Radar', data: RadaCharData }"></canvas>
+            </div>
+        </div>
+    </div>
+    <div data-role="panel" id="panelgrid" data-position-fixed="true" data-position="left" data-display="overlay"
+         data-theme="a">
+        <p align="center"><img class="popphoto" src="images/exsm.png" height="18px"></p>
+        <ul data-role="listview" data-inset="true" data-theme="b" class="ui-nodisc-icon ui-alt-icon">
+            <li><a href="signin.html" rel="external"> <img src="images/unknown.png" alt="plan" class="ui-li-icon"><font
+                    size="2">主页</font></a></li>
+            <li><a href="#" rel="external"> <img src="images/ufo.png" alt="plan" class="ui-li-icon"><font
+                    size="2">样例</font></a></li>
+        </ul>
+        <div class="ui-nodisc-icon ui-alt-icon">
+            <p align="center"><a href="#" data-rel="close"
+                                 class="ui-btn ui-shadow ui-corner-all ui-icon-back ui-btn-icon-notext ui-btn-inline"
+                                 style="margin-right: 0px;">back</a></p>
+        </div>
+    </div>
+</div>
+
+
+<script src="lib/chart.js" type="text/javascript"></script>
+<script src="lib/knockout-3.2.0.min.js" type="text/javascript"></script>
+<script src="lib/knockout.chart.js" type="text/javascript"></script>
+
+<script>
+
+    function DummyViewModel() {
+        this.SimpleLineData = {
+            labels: ["January", "February", "March", "April", "May", "June", "July"],
+            datasets: [
+                {
+                    label: "My First dataset",
+                    fillColor: "rgba(220,220,220,0.2)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    pointColor: "rgba(220,220,220,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: [65, 59, 80, 81, 56, 55, 40]
+                },
+                {
+                    label: "My Second dataset",
+                    fillColor: "rgba(151,187,205,0.2)",
+                    strokeColor: "rgba(151,187,205,1)",
+                    pointColor: "rgba(151,187,205,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(151,187,205,1)",
+                    data: [28, 48, 40, 19, 86, 27, 90]
+                }
+            ]
+        };
+
+        this.RedValue = ko.observable(300);
+        this.GreenValue = ko.observable(50);
+        this.YellowValue = ko.observable(100);
+
+        this.DynamicDoughnutData = [
+            {
+                value: this.RedValue,
+                color: "#F7464A",
+                highlight: "#FF5A5E",
+                label: "Red"
+            },
+            {
+                value: this.GreenValue,
+                color: "#46BFBD",
+                highlight: "#5AD3D1",
+                label: "Green"
+            },
+            {
+                value: this.YellowValue,
+                color: "#FDB45C",
+                highlight: "#FFC870",
+                label: "Yellow"
+            }
+        ];
+
+
+        this.DynamicPieData = [
+            {
+                value: this.RedValue,
+                color: "#F7464A",
+                highlight: "#FF5A5E",
+                label: "Red"
+            },
+            {
+                value: this.GreenValue,
+                color: "#46BFBD",
+                highlight: "#5AD3D1",
+                label: "Green"
+            },
+            {
+                value: this.YellowValue,
+                color: "#FDB45C",
+                highlight: "#FFC870",
+                label: "Yellow"
+            }
+        ];
+
+        this.SimpleBarData = {
+            labels: ["January", "February", "March", "April", "May", "June", "July"],
+            datasets: [
+                {
+                    label: "My First dataset",
+                    fillColor: "rgba(220,220,220,0.5)",
+                    strokeColor: "rgba(220,220,220,0.8)",
+                    highlightFill: "rgba(220,220,220,0.75)",
+                    highlightStroke: "rgba(220,220,220,1)",
+                    data: [65, 59, 80, 81, 56, 55, 40]
+                },
+                {
+                    label: "My Second dataset",
+                    fillColor: "rgba(151,187,205,0.5)",
+                    strokeColor: "rgba(151,187,205,0.8)",
+                    highlightFill: "rgba(151,187,205,0.75)",
+                    highlightStroke: "rgba(151,187,205,1)",
+                    data: [28, 48, 40, 19, 86, 27, 90]
+                }
+            ]
+        };
+
+        this.RadaCharData = {
+            labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
+            datasets: [
+                {
+                    label: "My First dataset",
+                    fillColor: "rgba(220,220,220,0.2)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    pointColor: "rgba(220,220,220,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: [65, 59, 90, 81, 56, 55, 40]
+                },
+                {
+                    label: "My Second dataset",
+                    fillColor: "rgba(151,187,205,0.2)",
+                    strokeColor: "rgba(151,187,205,1)",
+                    pointColor: "rgba(151,187,205,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(151,187,205,1)",
+                    data: [28, 48, 40, 19, 96, 27, 100]
+                }
+            ]
+        };
+
+
+    }
+
+    ko.applyBindings(new DummyViewModel());
+</script>
+</body>
 </html>
