@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link href="themes/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css"/>
+	<link rel="stylesheet" href="themes/bladecolor.min.css"/>
+	<link rel="stylesheet" href="themes/bootstrap.min.css">
+	<script src="lib/jquery-1.10.2.min.js"></script>
+	<script src="lib/jquery.mobile-1.4.5.js"></script>
+	<!--<script src="lib/knockout-3.2.0.min.js" type="text/javascript"></script>-->
+	<script src="lib/knockout.debug-3.0.0.js" type="text/javascript"></script>
+	<!--<script src="lib/knockout.jquery.mobile.js" type="text/javascript"></script>-->
+	<script type="text/javascript" src="src/jqm-knockout.js"></script>
+	<script type="text/javascript" src="src/jqm-table.js"></script>
+
+</head>
+<body>
+
+	<div id="main" data-role="page">
+		<div data-role="header"><h1>Knockout Testing</h1></div>
+
+		<div data-role="content">
+			<table data-bind="table: { header: tableDataSource.header, data: tableDataSource.data,options:tableDataSource.optionsValue }"></table>
+			<label for="cb1">Checkbox</label>
+			<input type="checkbox" id="cb1" data-bind="jqmChecked: active, jqmDisable: disabled" />
+			<button href="#" data-bind="vclick: toggleActive, jqmDisable: disabled" data-role="button">Toggle Checkbox</button>
+
+			<label for="sel1">Country</label>
+			<select data-bind="options: availableCountries, optionsText: 'countryName', jqmValue: selectedCountry, optionsCaption: 'Choose...', jqmDisable: disabled">
+			</select>
+			<a href="#" data-bind="vclick: nextCountry, jqmDisable: disabled" data-role="button">Next Country</a>
+
+			<label for="rng1">Slide</label>
+			<input type="range" data-bind="jqmValue: sliderValue, jqmDisable: disabled" min="0" max="100" />
+			<a href="#" data-bind="vclick: incrementSlider, jqmDisable: disabled" data-role="button">Increment Slider</a>
+
+			<label for="flip-1">Flip switch</label>
+			<select name="flip-1" id="flip-1" data-role="slider" data-bind="jqmValue: flipValue, jqmDisable: disabled">
+			  <option value="0">Off</option>
+			  <option value="1">On</option>
+			</select>
+			<a href="#" data-bind="vclick: toggleFlipValue, jqmDisable: disabled" data-role="button">Toggle Flipper</a> 
+
+			<div data-role="rangeslider">
+			  <label for="range-1a">Rangeslider:</label>
+			  <input name="range-1a" id="range-1a" min="0" max="100" type="range" data-bind="jqmValue: lowValue, jqmDisable: disabled" />
+			  <label for="range-1b">Rangeslider:</label>
+			  <input name="range-1b" id="range-1b" min="0" max="100" type="range" data-bind="jqmValue: highValue, jqmDisable: disabled" />
+			</div>
+			<a href="#" data-bind="vclick: alterRange, jqmDisable: disabled" data-role="button">Alter Range</a>
+
+			<label for="tb1">Textbox</label>
+			<input id="tb1" type="text" data-bind="jqmValue: textValue, jqmDisable: disabled" />
+
+			<label for="cb2" data-bind="jqmText: disabledText"></label>
+			<input type="checkbox" id="cb2" data-bind="jqmChecked: disabled" />
+
+			<a href="#page2" data-role="button">Next Page</a>
+		</div>
+	</div>
+
+	<div id="page2" data-role="page">
+		<div data-role="header"><h1>Page 2</h1></div>
+
+		<div data-role="content">
+			<h3>List View</h3>
+			<form class="ui-filterable">
+				<input id="rich-autocomplete-input" data-type="search" placeholder="Search...(filtertext or listtext)">
+			</form>
+			<ul data-role="listview" data-theme="b" data-filter="true" data-inset="true" data-input="#rich-autocomplete-input" data-bind="jqmForeach: { data: data, afterRender: afterRender, afterAdd: afterAdd }, visible: data().length > 0">
+				<li data-bind="jqmFilterText:$data.filterText,jqmIcon:$data.icon"><a href="#"><span data-bind="jqmText: $data.countryName"></span></a></li>
+			</ul>
+
+			<h3 data-bind="visible: data().length === 0">No records found</h3>
+			<ul>
+				<li>yes</li>
+			</ul>
+			<h3>Virtual Elements</h3>
+			<ul data-role="listview" data-theme="b" data-filter="true" data-inset="true" >
+				<!-- ko jqmForeach: data -->
+					<li>
+						<span data-bind="jqmText: countryName"></span>
+						<span data-bind="jqmText: countryPopulation" class="ui-li-count"></span>
+					</li>
+				<!-- /ko -->
+			</ul>
+
+			<fieldset data-role="controlgroup">
+				<legend>Select One</legend>
+				<!-- ko jqmForeach: data -->
+				<label data-bind="attr: { 'for': 'rdo' + $index() }, jqmText: countryName"></label>
+				<input name="radio-country" type="radio" data-bind="jqmChecked: $parent.selectedCountry, checkedValue: $data, attr: { id: 'rdo' + $index() }" />
+				<!-- /ko -->
+			</fieldset>
+
+			<fieldset data-bind="with: selectedCountry">
+				<legend>Selected Country</legend>
+
+				<label for="txtCountryName">Name:</label>
+				<input type="text" data-bind="jqmValue: $data.countryName" />
+
+				<label for="txtCountryPopulation">Population:</label>
+				<input type="number" data-bind="jqmValue: $data.countryPopulation" />
+			</fieldset>
+
+			<a href="#" data-bind="vclick: populateData" data-role="button">Populate</a>
+			<a href="#" data-bind="vclick: resetData" data-role="button">Clear</a>
+
+		</div>
+	</div>
+
+	<script>
+
+	var vm;
+
+  var Country = function(name, population,filterText,icon) {
+      this.countryName = ko.observable(name);
+      this.countryPopulation = ko.observable(population);
+	  this.filterText = ko.observable(filterText);
+	  this.icon = icon;
+  };
+
+	$().ready(function() {
+
+    function ViewModel() {
+  		this.active = ko.observable(true);
+  		this.toggleActive = function() {
+  			this.active(!this.active());
+  		};
+
+    	this.disabled = ko.observable(false);
+    	this.disabledText = ko.computed(function() {
+  			return this.disabled() ? "enable" : "disable";
+  		}, this);
+
+    	this.textValue = ko.observable("test value");
+
+    	this.sliderValue = ko.observable(50);
+
+    	this.flipValue = ko.observable(0);
+
+    	this.lowValue = ko.observable(10);
+    	this.highValue = ko.observable(90);
+
+    	this.alterRange = function() {
+  			this.lowValue(Math.floor((Math.random() * 50) + 1));
+  			this.highValue(Math.floor((Math.random() * 50 + 51)));
+  		};
+
+  		this.toggleFlipValue = function() {
+  			var value = this.flipValue();
+  			this.flipValue(value == 1 ? 0 : 1);
+  		};
+
+  		this.incrementSlider = function() {
+  			var value = parseInt(this.sliderValue(), 10) + 5;
+				if (value > 100) {
+					value = 0;
+				}
+
+				this.sliderValue(value);
+  		};
+
+  		this.nextCountry = function() {
+  			var index = 0;
+  			var selected = this.selectedCountry();
+
+  			if (selected) {
+  				index = this.availableCountries.indexOf(selected) + 1;
+  				if (index === this.availableCountries().length) {
+  					index = 0;
+  				}
+  			}
+
+  			this.selectedCountry(this.availableCountries()[index]);
+  		};
+
+      this.availableCountries = ko.observableArray([
+        new Country("UK", 65000000,'NASDAQ:AMZNL Amazon.com, Inc.','delete'),
+        new Country("USA", 320000000,'ABC:ABC Amazon.com, Inc.','check'),
+        new Country("Sweden", 29000000,'EFG:EGF Amazon.com, Inc.','check')
+      ]);
+
+      this.selectedCountry = ko.observable();
+      this.tableDataSource =  {
+		  header: [ 'x', 'y', 'z' ],
+		  data: [
+			  [ 1, 2, 3 ],
+			  [ 4, 5, 6 ],
+			  [ 7, 8, 9 ]
+		  ],
+		optionsValue:{
+			data_mode:"columntoggle",
+			data_column_popup_theme:"b",
+			class:"ui-body-a ui-shadow ui-responsive table-stripe ui-table ui-table-columntoggle"
+		}
+	  };
+
+      this.data = ko.observableArray();
+
+      this.populateData = function() {
+      	this.data(this.availableCountries());
+      };
+
+      this.resetData = function() {
+      	this.data([]);
+      };
+
+      this.afterAdd = function() {
+      	//console.log("original after-add");
+      };
+
+      this.afterRender = function() {
+      	//console.log("origina after-render");
+      	//$.mobile.activePage.find("[data-role='listview']").listview("refresh");
+      };
+
+    }
+
+		ko.applyBindings(vm = new ViewModel());
+
+	});
+
+	</script>
+</body>
+</html>
