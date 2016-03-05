@@ -157,7 +157,7 @@ ko.bindingHandlers.table = {
             var attribute = pro.replace(/_/g,'-');
             $(element).attr(attribute,options[pro]);
         }
-        $(element).table('refresh');
+        //$(element).table('refresh');
         // Make sure subscriptions are disposed if the table is cleared
         if (itemSubs) {
             tableBody = element.tBodies[0];
