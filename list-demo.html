@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="themes/jqm-demos.css">
     <script src="lib/jquery-1.10.2.min.js"></script>
     <script src="lib/jquery.mobile-1.4.5.js"></script>
+    <script src="lib/knockout-3.2.0.min.js"></script>
+    <script src="src/jqm-knockout.js"></script>
     <link rel="shortcut icon" href="favicon.ico">
 </head>
 <body>
@@ -27,16 +29,14 @@
             <form class="ui-filterable">
                 <input id="rich-autocomplete-input" data-type="search" placeholder="Search...(filtertext or listtext)">
             </form>
-            <ul data-role="listview" data-theme="b" data-filter="true" data-inset="true" data-input="#rich-autocomplete-input">
-                <li data-filtertext="NASDAQ:ADBE Adobe Systems Incorporated"><a href="#">Adobe</a></li>
-                <li data-icon="comment" data-filtertext="NASDAQ:AMZNL Amazon.com, Inc."><a href="#">Amazon</a></li>
-                <li data-icon="delete" data-filtertext="NASDAQ:AAPL Apple Inc."><a href="#">Apple</a></li>
-                <li data-icon="location" data-filtertext="NASDAQ:GOOG Google Inc."><a href="#">Google</a></li>
-                <li data-icon="eye" data-filtertext="NYSE:IBM Intl. International Business Machines Corp."><a href="#">IBM</a></li>
-                <li data-icon="gear" data-filtertext="NASDAQ:MSFT Microsoft Corporation"><a href="#">Microsoft</a></li>
-                <li data-icon="search" data-filtertext="NASDAQ:YHOO Yahoo! Inc."><a href="#">Yahoo</a></li>
-                <li data-icon="check" data-filtertext="USA U.S.A. United States of America"><a href="#">United States</a></li>
+            <ul data-role="listview" data-theme="b" data-filter="true" data-inset="true" data-input="#rich-autocomplete-input"
+                data-bind="jqmTemplate: {name:'listTemplate', foreach:listItems},jqmRefreshList:listItems">
+
             </ul>
+
+            <script type="text/html" id="listTemplate">
+                <li data-bind="attr:{'data-icon':iconType,'data-filtertext':filterText}" ><a href="#"><span data-bind="text:text"></span></a></li>
+            </script>
             <div class="well" style="margin-top:8px;">
                 <h3 style="padding: 6px 6px;">Simple List 代码说明</h3>
                 <p style="padding: 6px 6px;">对autocomplete起作用的文字有两处filtertext和listtext即 <code>li data-filtertext="NASDAQ:ADBE Adobe Systems Incorporated"</code>双引号中的文字以及List本身的文本代码</p>
@@ -64,5 +64,49 @@
     </div>
 </div>
 
+<script language="javascript">
+    $(function(){
+        var list = [{
+            iconType:"comment",
+            filterText:"NASDAQ:ADBE Adobe Systems Incorporated",
+            text:"Adobe"
+        },
+            {
+                iconType:"delete",
+                filterText:"NASDAQ:AAPL Apple Inc.",
+                text:"Apple"
+            },
+            {
+                iconType:"comment",
+                filterText:"NASDAQ:AMZNL Amazon.com, Inc.",
+                text:"Amazon"
+            },
+            {
+                iconType:"location",
+                filterText:"NASDAQ:GOOG Google Inc.",
+                text:"Google"
+            },
+            {
+                iconType:"gear",
+                filterText:"NYSE:IBM Intl. International Business Machines Corp.",
+                text:"IBM"
+            },
+            {
+                iconType:"search",
+                filterText:"NASDAQ:YHOO Yahoo! Inc.",
+                text:"Yahoo"
+            },
+            {
+                iconType:"check",
+                filterText:"USA U.S.A. United States of America",
+                text:"United States"
+            },
+        ];
+        var viewmodel = {listItems : ko.observableArray(list)};
+        ko.applyBindings(viewmodel, document.getElementById("logonView"));
+    });
+
+</script>
 </body>
+
 </html>

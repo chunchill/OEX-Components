@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="themes/jqm-demos.css">
     <script src="lib/jquery-1.10.2.min.js"></script>
     <script src="lib/jquery.mobile-1.4.5.js"></script>
+    <script src="lib/knockout-3.2.0.min.js"></script>
+    <script src="src/jqm-knockout.js"></script>
     <link rel="shortcut icon" href="favicon.ico">
 </head>
 <body>
@@ -22,25 +24,27 @@
             </div>
         </div>
         <div class="jqm-block-content" style="margin: 2px 2px; margin-top:4px; padding: 6px 4px; background-image:url(images/tweets-bg.jpg); border-color:#E4E4E4;">
-            <ul data-role="listview" data-inset="true">
-                <li><a href="#"><img src="images/chart.png" alt="France" class="ui-li-icon">France</a></li>
-                <li><a href="#"><img src="images/user62.png" alt="Germany" class="ui-li-icon">Germany</a></li>
+            <ul data-role="listview" data-inset="true"
+                data-bind="jqmTemplate: {name:'listTemplate1', foreach:listItems1},jqmRefreshList:listItems1">
+
+
             </ul>
             <br>
-            <ul data-role="listview" data-split-icon="location" data-split-theme="b" data-inset="true">
-                <li><a href="#"><img src="images/user62.png">
-                    <h2>Broken Bells</h2>
-                    <p>Broken Bells</p>
-                </a> <a href="#" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a> </li>
-                <li><a href="#"><img src="images/ironman.png">
-                    <h2>测试</h2>
-                    <p>Hot Chip</p>
-                </a> </li>
-                <li><a href="#"><img src="images/people.png">
-                    <h2>Wolfgang Amadeus Phoenix</h2>
-                    <p>Phoenix</p>
-                </a> </li>
+            <ul data-role="listview" data-split-icon="location" data-split-theme="b" data-inset="true"
+                data-bind="jqmTemplate: {name:'listTemplate2', foreach:listItems2},jqmRefreshList:listItems2">
+
             </ul>
+
+            <script type="text/html" id="listTemplate1">
+                <li><a href="#"><img data-bind="attr:{src:src,alt:alt}" class="ui-li-icon"><span data-bind="text:text"></span></a></li>
+            </script>
+
+            <script type="text/html" id="listTemplate2">
+
+                <li><a href="#"><img data-bind="attr:{src:src}">
+                    <h2><span data-bind="text:title"></span></h2>
+                    <p><span data-bind="text:text"></span></p>
+                </a> </li>            </script>
             <div class="well" style="margin-top:8px;">
                 <h3 style="padding: 6px 6px;">Image List 代码说明</h3>
                 <p style="padding: 6px 6px;">对于小图列表，图片大小不得小于16x16 pixel<br>
@@ -68,6 +72,40 @@
         </div>
     </div>
 </div>
+<script language="javascript">
+    $(function(){
+        var list1 = [{
+            src:"images/chart.png",
+            alt:"France",
+            text:"France"
+        },
+            {
+                src:"images/user62.png",
+                alt:"Germany",
+                text:"Germany"
+            }
+        ];
 
+        var list2 = [{
+            src:"images/user62.png",
+            title:"Broken Bells",
+            text:"Broken Bells"
+        },
+            {
+                src:"images/ironman.png",
+                title:"测试",
+                text:"Hot Chip"
+            },
+            {
+                src:"images/people.png",
+                title:"Wolfgang Amadeus Phoenix",
+                text:"Phoenix"
+            }
+        ];
+        var viewmodel = {listItems1 : ko.observableArray(list1),listItems2:ko.observableArray(list2)};
+        ko.applyBindings(viewmodel, document.getElementById("logonView"));
+    });
+
+</script>
 </body>
 </html>
