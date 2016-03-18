@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="themes/jqm-demos.css">
     <script src="lib/jquery-1.10.2.min.js"></script>
     <script src="lib/jquery.mobile-1.4.5.js"></script>
+    <script src="lib/knockout-3.2.0.min.js"></script>
+    <script src="src/jqm-knockout.js"></script>
+    <script src="lib/knockout-switch-case.js"></script>
     <link rel="shortcut icon" href="favicon.ico">
 </head>
 <body>
@@ -24,30 +27,29 @@
             </div>
         </div>
         <div class="jqm-block-content" style="margin: 2px 2px; margin-top:4px; padding: 6px 4px; background-image:url(images/tweets-bg.jpg); border-color:#E4E4E4;">
-            <div data-role="collapsibleset" data-theme="a" data-content-theme="b">     
-                <div data-role="collapsible" data-iconpos="right" data-collapsed-icon="carat-d" data-expanded-icon="carat-u">     
-                    <h2><i class="fa fa-list-ol"></i> List</h2>
-                    <ul data-role="listview"  data-filter="true" data-inset="true">
-                        <li><a href="oex_list.html"><img src="images/list98.png" alt="" class="ui-li-icon ui-corner-none">Simple List</a></li>
-                        <li><a href="oex_clplist.html"><img src="images/expand8.png" alt="" class="ui-li-icon">Collapsibleset</a></li>
-                        <li><a href="oex_mlist.html"><img src="images/checked19.png" alt="" class="ui-li-icon">Multi line list</a></li>
-                        <li><a href="oex_imglist.html"><img src="images/image6.png" alt="" class="ui-li-icon">List with Image</a></li>
-                    </ul>
+            <form class="ui-filterable">
+                <div  data-bind="template: {name:'listTemplate', foreach:listItems}">
+
                 </div>
-                <div data-role="collapsible" data-iconpos="right" data-collapsed-icon="carat-d" data-expanded-icon="carat-u">  
-                    <h2>table</h2>
-                    <ul data-role="listview"  data-filter="true" data-inset="true">
-                        <li><a href="#"><img src="images/chart.png" alt="France" class="ui-li-icon ui-corner-none">France</a></li>
-                        <li><a href="#"><img src="images/chart.png" alt="France" class="ui-li-icon ui-corner-none">France</a></li>
-                    </ul>
-                </div>
-            </div>
+            </form>
+
+
             <script type="text/html" id="listTemplate">
-                <li data-bind="attr:{'data-icon':iconType,'data-filtertext':filterText}" ><a href="#"><span data-bind="text:text"></span></a></li>
+                <br>
+                <!-- ko switch: $data.type -->
+                <!-- ko case: 'string' -->
+                <input type="text" />
+
+                <!--/ko-->
+                <!-- ko case: 'boolean' -->
+                <input type="checkbox">
+                <!--/ko-->
+                <!--/ko-->
+
             </script>
             <div class="well" style="margin-top:8px;">
-                <h3 style="padding: 6px 6px;">Collapsible List 代码说明</h3>
-                <p style="padding: 6px 6px;">data-collapsed-icon="carat-d" data-expanded-icon="carat-u"分别代表收起和展开的图标</p>
+                <h3 style="padding: 6px 6px;">Simple List 代码说明</h3>
+                <p style="padding: 6px 6px;">对autocomplete起作用的文字有两处filtertext和listtext即 <code>li data-filtertext="NASDAQ:ADBE Adobe Systems Incorporated"</code>双引号中的文字以及List本身的文本代码</p>
             </div>
         </div>
     </div>
@@ -71,8 +73,34 @@
         </div>
     </div>
 </div>
+
 <script language="javascript">
+    $(function(){
+        var list = [{
+            type:"string",
+            name:"txtName",
+            id:"txtName",
+            value:"abc"
+        },
+            {
+                type:"boolean",
+                name:"txtGender",
+                id:"txtGender",
+                value:"true"
+            },
+            {
+                type:"string",
+                name:"txtGender",
+                id:"txtGender",
+                value:"true"
+            },
+
+        ];
+        var viewmodel = {listItems : ko.observableArray(list)};
+        ko.applyBindings(viewmodel, document.getElementById("logonView"));
+    });
 
 </script>
 </body>
+
 </html>
